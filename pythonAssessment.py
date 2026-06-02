@@ -63,14 +63,22 @@ def average_word_length(text: str) -> float:
 
 
 def count_paragraphs(text: str) -> int:
-    paragraphs = [p for p in re.split(r"\n{2,}", text) if p.strip()]
-    return len(paragraphs)
+    raw_paragraphs = re.split(r"\n{2,}", text)
+    count = 0
+    index = 0
+    while index < len(raw_paragraphs):
+        if raw_paragraphs[index].strip():
+            count += 1
+        index += 1
+    return count
 
 
 def count_sentences(text: str) -> int:
     # A simple heuristic: count terminal punctuation groups as sentence boundaries
+    if not text.strip():
+        return 1
     candidates = SENTENCE_RE.findall(text)
-    return len(candidates)
+    return max(1, len(candidates))
 
 
 def analyze(text: str, word: str = None, top_n: int = 1, case_sensitive: bool = False, ignore_stopwords: bool = True) -> dict:
