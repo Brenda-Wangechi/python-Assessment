@@ -1,0 +1,5 @@
+Tech startup Innovation Labs announced a major breakthrough in natural language processing today. The team demonstrated a new model that significantly improves summarization quality.
+
+According to the lead researcher, the model reduces hallucinations and preserves factual consistency. This achievement could reshape how newsrooms produce summaries and how analysts consume information.
+
+Investors reacted positively, with several firms indicating increased interest. The company plans to open-source key components later this year.
