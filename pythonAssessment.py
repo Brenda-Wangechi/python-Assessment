@@ -54,12 +54,25 @@ def most_common_words(text: str, top_n: int = 1, ignore_stopwords: bool = True) 
     return counts.most_common(top_n)
 
 
+def identify_most_common_word(text: str) -> str | None:
+    words = [w.lower() for w in tokenize_words(text)]
+    if not words:
+        return None
+    counts = Counter(words)
+    most_common = counts.most_common(1)
+    return most_common[0][0] if most_common else None
+
+
 def average_word_length(text: str) -> float:
     words = tokenize_words(text)
     if not words:
-        return 0.0
+        return 0
     total_len = sum(len(w) for w in words)
     return total_len / len(words)
+
+
+def calculate_average_word_length(text: str) -> float:
+    return average_word_length(text)
 
 
 def count_paragraphs(text: str) -> int:
