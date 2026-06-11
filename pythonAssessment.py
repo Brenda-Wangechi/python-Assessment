@@ -118,6 +118,64 @@ def print_analysis(result: dict, word: str = None) -> None:
         print(f"  {w}: {c}")
 
 
+class Book:
+    def __init__(self, title: str, page_count: int):
+        if not title:
+            raise ValueError("title is required")
+        self.title = title
+        # use the property setter to validate
+        self._page_count = None
+        self.page_count = page_count
+
+    @property
+    def page_count(self) -> int | None:
+        return self._page_count
+
+    @page_count.setter
+    def page_count(self, value):
+        if not isinstance(value, int):
+            print("page_count must be an integer")
+            self._page_count = None
+        else:
+            self._page_count = value
+
+    def turn_page(self) -> None:
+        print("Flipping the page...wow, you read fast!")
+
+
+class Coffee:
+    VALID_SIZES = {"Small", "Medium", "Large"}
+
+    def __init__(self, size: str, price: float):
+        if not size:
+            raise ValueError("size is required")
+        if price is None:
+            raise ValueError("price is required")
+        self._size = None
+        self.size = size
+        self.price = float(price)
+
+    @property
+    def size(self) -> str:
+        return self._size
+
+    @size.setter
+    def size(self, value: str) -> None:
+        if value not in self.VALID_SIZES:
+            print("size must be Small, Medium, or Large")
+            self._size = None
+        else:
+            self._size = value
+
+    def tip(self) -> None:
+        print("This coffee is great, here's a tip!")
+        try:
+            self.price = float(self.price) + 1
+        except Exception:
+            # if price is somehow invalid, set to 1 higher from 0
+            self.price = 1.0
+
+
 def main(argv: List[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Text analysis for a news article file.")
     p.add_argument("--file", "-f", help="Path to article text file", required=True)
@@ -125,6 +183,7 @@ def main(argv: List[str] | None = None) -> int:
     p.add_argument("--top", "-t", help="Show top N most common words", type=int, default=5)
     p.add_argument("--case-sensitive", action="store_true", help="Count word with case-sensitivity")
     p.add_argument("--no-stopwords", action="store_true", help="Do not filter common stopwords from top results")
+    p.add_argument("--demo", action="store_true", help="Run demo of Book and Coffee classes")
     args = p.parse_args(argv)
 
     try:
@@ -132,6 +191,22 @@ def main(argv: List[str] | None = None) -> int:
     except FileNotFoundError:
         print(f"Error: file not found: {args.file}")
         return 2
+
+    if args.demo:
+        def demo_usage():
+            print("--- Demo: Book and Coffee ---")
+            b = Book(title="The Hobbit", page_count=310)
+            print(f"Created Book: title={b.title}, page_count={b.page_count}")
+            b.turn_page()
+
+            c = Coffee(size="Medium", price=3.5)
+            print(f"Created Coffee: size={c.size}, price={c.price}")
+            c.tip()
+            print(f"Coffee price after tip: {c.price}")
+            print("--- End Demo ---")
+
+        demo_usage()
+        return 0
 
     # Run analysis
     result = analyze(text, word=args.word, top_n=args.top, case_sensitive=args.case_sensitive, ignore_stopwords=not args.no_stopwords)
