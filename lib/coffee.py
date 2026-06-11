@@ -17,7 +17,7 @@ class Coffee:
         print("Your shoe has been repaired")
 
     def tip(self, amount=1):
-        print("This coffee is great, here's a tip!")
+        print("This coffee is great, here\u2019s a tip!")
         try:
             self.price += amount
         except Exception:
